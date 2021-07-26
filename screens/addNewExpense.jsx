@@ -5,6 +5,7 @@ import { Summary } from '../components';
 
 const AddNewExpense = ({ route, navigation }) => {
   const DATA = ls.get('DATA') || [];
+  const PRIMARYKEY = ls.get('PRIMARYKEY') || [];
   const [title, setTitle] = useState('');
   const [expense, setExpense] = useState(0);
   const [addDefault, setAddDefault] = useState('');
@@ -25,13 +26,14 @@ const AddNewExpense = ({ route, navigation }) => {
 
   const onSubmit = () => {
     DATA.push({
-      id: DATA[DATA.length-1].id + 1,
+      id: PRIMARYKEY + 1,
       title: title,
       expense: parseInt(expense),
       addDefault: (addDefault.length > 0) ? parseInt(addDefault) : null,
       category: category,
     });
     ls.set('DATA', DATA);
+    ls.set('PRIMARYKEY', PRIMARYKEY + 1);
     route.params.triggerRefreshHome(true);
     navigation.navigate('Home');
   }
