@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, SectionList } from 'react-native';
+import { View, Text, StyleSheet, Button, SectionList, TouchableOpacity } from 'react-native';
 import { homeStyles } from '../styles/styles';
 
 const ExpenseSheet = props => {
@@ -24,7 +24,19 @@ const ExpenseSheet = props => {
   }
 
   const renderItem = ({ item }) => (
-    <View style={homeStyles.item}>
+    <TouchableOpacity
+      style={homeStyles.item}
+      onPress={() => {props.navigation.navigate('Add new expense', {
+        item: {
+          id: item.id,
+          title: item.title,
+          expense: item.expense,
+          addDefault: item.addDefault,
+          category: item.category,
+        },
+        triggerRefreshHome: props.triggerRefreshHome
+      })}}
+    >
       <Text style={homeStyles.title}>{item.title}</Text>
       
       <View style={homeStyles.numericals}>
@@ -43,7 +55,7 @@ const ExpenseSheet = props => {
         </View>
         <Text style={homeStyles.title}>{item.expense}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

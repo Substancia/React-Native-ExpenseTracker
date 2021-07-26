@@ -7,7 +7,7 @@ const ExpenseHistory = props => {
 
   useEffect(() => {
     setHistory(ls.get('HISTORY') || []);
-  }, [props.dataChange]);
+  }, [props.dataChange, props.refreshHome]);
 
   const renderItem = ({ item }) => (
     <View>

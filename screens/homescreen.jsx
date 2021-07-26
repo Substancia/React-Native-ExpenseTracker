@@ -89,10 +89,12 @@ const HomeScreen = ({ navigation }) => {
             setModalTitle={setModalTitle}
             setModalVisible={setModalVisible}
             addExpense={addExpense}
-          />}
+            navigation={navigation}
+            triggerRefreshHome={setRefreshHome}
+            />}
         </Tab.Screen>
         <Tab.Screen name='History'>
-          {props => <ExpenseHistory dataChange={dataChange} />}
+          {props => <ExpenseHistory dataChange={dataChange} refreshHome={refreshHome} />}
         </Tab.Screen>
       </Tab.Navigator>
 
