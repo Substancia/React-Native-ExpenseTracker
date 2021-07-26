@@ -55,7 +55,7 @@ const modalStyles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    // backgroundColor: "white",
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -76,6 +76,7 @@ const modalStyles = StyleSheet.create({
     // height: 40,
     width: 100,
     margin: 10,
+    padding: 5,
     fontSize: 30,
     textAlign: 'center',
     backgroundColor: '#ccc',
@@ -84,17 +85,26 @@ const modalStyles = StyleSheet.create({
 });
 
 const summaryStyles = StyleSheet.create({
-  topPanel: {
+  summary: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    paddingTop: StatusBar.currentHeight || 0,
+    // paddingTop: StatusBar.currentHeight || 0,
     backgroundColor: '#ffbc5d',
   },
-  topPanelItem: {
+  summaryTexts: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    // height: '100%',
+  },
+  summaryItem: {
     fontSize: 26,
+  },
+  summaryButtons: {
+    marginVertical: 2,
   },
 });
 
