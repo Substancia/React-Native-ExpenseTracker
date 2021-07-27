@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, SafeAreaView, TextInput, View, Text, CheckBox } from 'react-native';
 import ls from 'local-storage';
 import { Summary } from '../components';
+import { DeleteModal } from '../Modals';
 
 const AddNewExpense = ({ route, navigation }) => {
   const DATA = ls.get('DATA') || [];
@@ -10,6 +11,7 @@ const AddNewExpense = ({ route, navigation }) => {
   const [expense, setExpense] = useState(0);
   const [addDefault, setAddDefault] = useState('');
   const [category, setCategory] = useState('others');
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const editExpense = ('item' in route.params);
 
@@ -62,26 +64,38 @@ const AddNewExpense = ({ route, navigation }) => {
     navigation.navigate('Home');
   }
 
-  const deleteItem = () => {
+  const deleteButton = () => {
     if(editExpense) return (
       <Button
         title='Delete expense'
         onPress={() => {
-          DATA.map((item, index) => {
-            if(item.id == route.params.item.id) {
-              DATA.splice(index, 1);
-              return;
-            }
-          });
-          var HISTORY = ls.get('HISTORY');
-          HISTORY = HISTORY.filter(item => {
-            if(item.primaryID != route.params.item.id) return item;
-          });
-          ls.set('DATA', DATA);
-          ls.set('HISTORY', HISTORY);
-          route.params.triggerRefreshHome(true);
-          navigation.navigate('Home');
-              }}
+          setDeleteModalVisible(true);
+        }}
+      />
+    );
+  }
+
+  const deleteItem = () => {
+    DATA.map((item, index) => {
+      if(item.id == route.params.item.id) {
+        DATA.splice(index, 1);
+        return;
+      }
+    });
+    ls.set('DATA', DATA);
+    // route.params.triggerRefreshHome(true);
+    navigation.navigate('Home');
+  }
+
+  const deleteModalView = () => {
+    if(editExpense) return (
+      <DeleteModal
+        deleteType='expenseItem'
+        deleteModalVisible={deleteModalVisible}
+        setDeleteModalVisible={setDeleteModalVisible}
+        item={{id: route.params.item.id, title: title}}
+        deleteItem={deleteItem}
+        triggerRefreshHome={route.params.triggerRefreshHome}
       />
     );
   }
@@ -127,7 +141,8 @@ const AddNewExpense = ({ route, navigation }) => {
           disabled={title.length == 0}
           onPress={onSubmit}
         />
-        {deleteItem()}
+        {deleteButton()}
+        {deleteModalView()}
       </View>
     </SafeAreaView>
   );

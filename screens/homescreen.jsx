@@ -94,7 +94,13 @@ const HomeScreen = ({ navigation }) => {
             />}
         </Tab.Screen>
         <Tab.Screen name='History'>
-          {props => <ExpenseHistory dataChange={dataChange} refreshHome={refreshHome} />}
+          {props => 
+            <ExpenseHistory
+              dataChange={dataChange}
+              refreshHome={refreshHome}
+              triggerRefreshHome={setRefreshHome}
+            />
+          }
         </Tab.Screen>
       </Tab.Navigator>
 
