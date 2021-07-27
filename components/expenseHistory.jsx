@@ -6,7 +6,7 @@ import { DeleteModal } from '../Modals';
 const ExpenseHistory = props => {
   const [history, setHistory] = useState(ls.get('HISTORY') || []);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const [historyItem, setHistoryItem] = useState({});
+  const [historyItem, setHistoryItem] = useState({ id: null, primaryID: null, title: '' });
 
   useEffect(() => {
     setHistory(ls.get('HISTORY') || []);

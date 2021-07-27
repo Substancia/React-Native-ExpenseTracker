@@ -69,4 +69,6 @@ const testHistory = [
 
 const primaryKey = 5;
 
-export { testDATA, testAllowance, testHistory, primaryKey, }
+const resetPeriodic = 'Never';
+
+export { testDATA, testAllowance, testHistory, primaryKey, resetPeriodic, }

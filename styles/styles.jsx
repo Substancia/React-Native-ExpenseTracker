@@ -108,4 +108,22 @@ const summaryStyles = StyleSheet.create({
   },
 });
 
-export { homeStyles, modalStyles, summaryStyles }
+const radioButtonStyles = StyleSheet.create({
+  outerRing: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    // borderColor: '#000',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  innerFill: {
+    height: 10,
+    width: 10,
+    borderRadius: 5,
+    backgroundColor: '#000',
+  },
+});
+
+export { homeStyles, modalStyles, summaryStyles, radioButtonStyles }

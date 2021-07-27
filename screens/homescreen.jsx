@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, SafeAreaView, } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { ExpenseHistory, ExpenseSheet, Summary } from '../components';
+import { ExpenseHistory, ExpenseSheet, resetData, Summary } from '../components';
 import ls from 'local-storage';
 import { AddAmountModal } from '../Modals';
 import { homeStyles } from '../styles/styles';
-import { testDATA, testAllowance, testHistory } from '../components/testData';
 
 const HomeScreen = ({ navigation }) => {
   const [DATA, SETDATA] = useState(ls.get('DATA') || []);
@@ -55,10 +54,8 @@ const HomeScreen = ({ navigation }) => {
 
   // Metadata: delete before deploying
   const resetTestData = () => {
-    ls.set('DATA', testDATA);
+    resetData();
     SETDATA(ls.get('DATA'));
-    ls.set('ALLOWANCE', testAllowance);
-    ls.set('HISTORY', testHistory);
     setDataChange(dataChange + 1);
   }
 
