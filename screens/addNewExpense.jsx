@@ -7,10 +7,13 @@ import { DeleteModal } from '../Modals';
 const AddNewExpense = ({ route, navigation }) => {
   const DATA = ls.get('DATA') || [];
   const PRIMARYKEY = ls.get('PRIMARYKEY') || [];
+  const HISTORY = ls.get('HISTORY') || [];
+  const newDate = new Date();
   const [title, setTitle] = useState('');
   const [expense, setExpense] = useState(0);
   const [addDefault, setAddDefault] = useState('');
   const [category, setCategory] = useState('others');
+  const [date, setDate] = useState({});
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
   const editExpense = ('item' in route.params);
@@ -22,6 +25,7 @@ const AddNewExpense = ({ route, navigation }) => {
       setCategory(route.params.item.category);
       if(route.params.item.addDefault != null)
         setAddDefault(route.params.item.addDefault.toString());
+      setDate(route.params.item.date);
     }
   }, [route.params]);
 
@@ -37,6 +41,12 @@ const AddNewExpense = ({ route, navigation }) => {
       </View>
     );
   }
+
+  const CreatedDate = () => editExpense ?
+    <View>
+      <Text>Created on: {date.date}-{date.month}-{date.year}</Text>
+    </View> :
+    null;
 
   const onSubmit = () => {
     if(editExpense) {
@@ -56,8 +66,25 @@ const AddNewExpense = ({ route, navigation }) => {
         expense: parseInt(expense),
         addDefault: (addDefault.length > 0) ? parseInt(addDefault) : null,
         category: category,
+        date: {
+          date: newDate.getDate(),
+          month: newDate.getMonth()+1,
+          year: newDate.getFullYear()
+        },
       });
       ls.set('PRIMARYKEY', PRIMARYKEY + 1);
+      HISTORY.push({
+        id: (HISTORY.length > 0) ? HISTORY[HISTORY.length-1].id + 1 : 0,
+        primaryID: PRIMARYKEY,
+        title: title,
+        amount: parseInt(expense),
+        date: {
+          date: newDate.getDate(),
+          month: newDate.getMonth()+1,
+          year: newDate.getFullYear()
+        },
+      });
+      ls.set('HISTORY', HISTORY);
     }
     ls.set('DATA', DATA);
     route.params.triggerRefreshHome(true);
@@ -136,6 +163,7 @@ const AddNewExpense = ({ route, navigation }) => {
           />
         </View>
         {addDefaultView()}
+        <CreatedDate />
         <Button
           title={editExpense ? 'Update' : 'Add'}
           disabled={title.length == 0}

@@ -17,6 +17,7 @@ const ExpenseHistory = props => {
       <View>
         <Text>{item.title}</Text>
         <Text>{item.amount}</Text>
+        <Text>Date: {item.date.date}-{item.date.month}-{item.date.year}</Text>
       </View>
       <Button title='X' onPress={() => deleteButton(item)} />
     </View>
@@ -30,7 +31,7 @@ const ExpenseHistory = props => {
   return (
     <View>
       <FlatList
-        data={history}
+        data={history.slice().reverse()}
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
       />

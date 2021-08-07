@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, SafeAreaView, } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { ExpenseHistory, ExpenseSheet, resetData, Summary } from '../components';
+import { checkPeriodicReset, ExpenseAnalysis, ExpenseHistory, ExpenseSheet, resetData, Summary } from '../components';
 import ls from 'local-storage';
 import { AddAmountModal } from '../Modals';
 import { homeStyles } from '../styles/styles';
@@ -26,22 +26,30 @@ const HomeScreen = ({ navigation }) => {
     }
   }, [refreshHome]);
 
-  // Metadata: delete before deploying
-  useEffect(() => {resetTestData()}, []);
+  useEffect(() => {
+    // resetTestData();
+    checkPeriodicReset(() => setRefreshHome(true));
+  }, []);
 
   const Tab = createMaterialTopTabNavigator();
 
   const addExpense = (id, amount=null) => {
     let tempDATA = DATA;
     let HISTORY = ls.get('HISTORY');
+    let date = new Date();
     tempDATA.map(item => {
       if(item.id == id) {
         item.expense += amount != null ? amount : item.addDefault;
         HISTORY.push({
-          id: HISTORY[HISTORY.length-1].id + 1,
+          id: (HISTORY.length > 0) ? HISTORY[HISTORY.length-1].id + 1 : 0,
           primaryID: id,
           title: item.title,
           amount: amount != null ? amount : item.addDefault,
+          date: {
+            date: date.getDate(),
+            month: date.getMonth()+1,
+            year: date.getFullYear()
+          },
         });
         return;
       }
@@ -53,11 +61,11 @@ const HomeScreen = ({ navigation }) => {
   }
 
   // Metadata: delete before deploying
-  const resetTestData = () => {
-    resetData();
-    SETDATA(ls.get('DATA'));
-    setDataChange(dataChange + 1);
-  }
+  // const resetTestData = () => {
+  //   resetData();
+  //   SETDATA(ls.get('DATA'));
+  //   setDataChange(dataChange + 1);
+  // }
 
   return (
     <SafeAreaView style={homeStyles.container}>
@@ -80,7 +88,7 @@ const HomeScreen = ({ navigation }) => {
 
       <Tab.Navigator>
         <Tab.Screen name='Expenses'>
-          {props => <ExpenseSheet
+          {() => <ExpenseSheet
             DATA={DATA}
             setCustomAmountId={setCustomAmountId}
             setModalTitle={setModalTitle}
@@ -91,7 +99,7 @@ const HomeScreen = ({ navigation }) => {
             />}
         </Tab.Screen>
         <Tab.Screen name='History'>
-          {props => 
+          {() => 
             <ExpenseHistory
               dataChange={dataChange}
               refreshHome={refreshHome}
@@ -99,10 +107,20 @@ const HomeScreen = ({ navigation }) => {
             />
           }
         </Tab.Screen>
+        <Tab.Screen name='Statistics'>
+          {() => 
+            <ExpenseAnalysis
+              DATA={DATA}
+              dataChange={dataChange}
+              refreshHome={refreshHome}
+            />
+          }
+        </Tab.Screen>
       </Tab.Navigator>
 
       {/* Metadata: delete before deploying */}
-      <Button title='Reset test data' onPress={resetTestData} />
+      {/* <Button title='Periodic reset' onPress={() => checkPeriodicReset(() => setRefreshHome(true))} />
+      <Button title='Reset test data' onPress={resetTestData} /> */}
     </SafeAreaView>
   );
 }

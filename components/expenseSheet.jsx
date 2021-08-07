@@ -27,13 +27,7 @@ const ExpenseSheet = props => {
     <TouchableOpacity
       style={homeStyles.item}
       onPress={() => {props.navigation.navigate('Add new expense', {
-        item: {
-          id: item.id,
-          title: item.title,
-          expense: item.expense,
-          addDefault: item.addDefault,
-          category: item.category,
-        },
+        item: item,
         triggerRefreshHome: props.triggerRefreshHome
       })}}
     >

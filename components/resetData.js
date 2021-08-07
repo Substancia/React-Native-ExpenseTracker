@@ -1,5 +1,4 @@
 // Metadata: delete before deploying
-import React from 'react';
 import ls from 'local-storage';
 import { testDATA, testHistory, testAllowance, primaryKey, resetPeriodic } from './testData';
 

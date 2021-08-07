@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
-import { Button, SafeAreaView, Text, TouchableOpacity, View } from 'react-native';
+import { Button, SafeAreaView, Text, TouchableOpacity, View, CheckBox } from 'react-native';
 import ls from 'local-storage';
 import { radioButtonStyles } from '../styles/styles';
+import { periodicResetOption } from '../components';
 
 const SettingsScreen = ({ navigation }) => {
-  const periodicResetOption = [
-    'At end of every month',
-    'Once every fixed number of days',
-    'Never'
-  ];
-  const [periodicReset, setPeriodicReset] = useState(ls.get('resetPeriodic') || 'Never');
+  const [periodicReset, setPeriodicReset] = useState(ls.get('RESETPERIODIC') || 'Never');
 
   const RadioButton = props => {
     return (
@@ -17,7 +13,7 @@ const SettingsScreen = ({ navigation }) => {
         onPress={() => setPeriodicReset(props.resetOption)}
       >
         <View style={radioButtonStyles.outerRing}>
-          {(props.resetOption == periodicReset) ? 
+          {(props.resetOption.expense == periodicReset.expense) ? 
             <View style={radioButtonStyles.innerFill} />
           : null}
         </View>
@@ -30,17 +26,34 @@ const SettingsScreen = ({ navigation }) => {
       <View>
         <Text>Reset periodically?</Text>
         {
-          periodicResetOption.map(item => (
-            <View>
+          periodicResetOption.map((item, index) => (
+            <View key={index}>
               <Text>{item}</Text>
-              <RadioButton resetOption={item} />
+              <RadioButton
+                resetOption={{
+                  expense: item,
+                  history: (index < periodicResetOption.length-1) ? false : null
+                }}
+              />
+              {(item == periodicReset.expense) && (index < periodicResetOption.length-1) ?
+                <View>
+                  <Text>Reset history too?</Text>
+                  <CheckBox
+                    value={(periodicReset.history == null) ? false : periodicReset.history}
+                    onValueChange={() => setPeriodicReset({
+                      expense: item,
+                      history: !periodicReset.history,
+                    })}
+                  />
+                </View>
+              : null}
             </View>
           ))
         }
         <Button
           title='Save'
           onPress={() => {
-            ls.set('resetPeriodic', periodicReset);
+            ls.set('RESETPERIODIC', periodicReset);
             navigation.goBack();
           }}
         />
